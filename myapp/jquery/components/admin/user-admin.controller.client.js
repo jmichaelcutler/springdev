@@ -1,41 +1,37 @@
 (function() {
+    $(init);
     var $usernameFld, $passwordFld;
-    var $removeBtn, $editButn, $createBtn;
+    var $removeBtn, $editBtn, $createBtn;
     var $firstNameFld, $lastNameFld;
     var $userRowTemplate, $tbody;
-    var userService = new AdminUserServiceClient();
-    $(main);
+    var userService = new UserServiceClient();
 
-    function main() {
+
+    function init() {
+        $usernameFld = $('#usernameFld');
+        $passwordFld = $('#passwordFld');
+        $firstNameFld = $('#firstNameFld');
+        $lastNameFld = $('#lastNameFld');
+        $userRowTemplate = $('.wbdv-template.wbdv-user')
+            .clone()
+            .removeClass('wbdv-hidden');
+        $createBtn = $('.wbdv-create');
+        $createBtn.click(createUser);
+        $removeBtn = $('.wbdv-remove');
+        $removeBtn.click(deleteUser);
+        $editBtn = $('.wbdv-edit');
+        $editBtn.click(updateUser);
 
     }
 
-    function AdminUserServiceClient(){
-        this.createUser = createUser;
-        this.findAllUsers = findAllUsers;
-        this.findUserById = findUserById;
-        this.deleteUser = deleteUser;
-        this.updateUser = updateUser;
-        this.selectUser = selectUser;
-        this.renderUser = renderUser;
-        this.renderUsers = renderUsers;
-        this.url = "http://localhost:8080/api/user";
-        var self = this;
 
-    }
 
     function createUser(user){
-        return fetch(self.url, {
-            method: "POST",
-            body: JSON.stringify(user)
-        })
+        userService.createUser(user);
     }
 
     function findAllUsers(callback){
-        return $.ajax({
-            url: self.url,
-            success: callback
-        })
+        userService.findAllUsers(callback);
     }
 
     function findUserById(userId){
@@ -64,8 +60,7 @@
     }
 
     function renderUsers(users){
-        for(var user in users) {
+        for(var user in users)
             this.renderUser(user);
-        }
     }
 })();
